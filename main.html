@@ -3,35 +3,105 @@
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="./js/three.js"></script>
+        <script src="./js/loaders/GLTFLoader.js"></script>
         <script src="./js/Game.js"></script>
+        <script src="./js/Scene.js"></script>
+
         <script>
+
+        function ball(mesh, vector) {
+          this._mesh = mesh;
+          this._vector = vector;
+        }
+        var game = new Game();
+        var scene = new Scene();
+        game._scene = this.scene;
+        scene.init = ()=>{
+          var obj = game.modelLoader('./models/detail_rocks.glb');
+          console.log(this.obj);
+          this.obj.position.x = 1;
+          this.obj.position.z = 1;
+          this.obj = game.modelLoader('./models/detail_tree.glb');
+          this.obj.position.x = 1;
+          this.obj = game.modelLoader('./models/enemy_ufoGreen.glb');
+
+          var light = new THREE.PointLight( 0xcccccc, 1, 100 );
+          light.position.set( 0, 3, 0 );
+          light.castShadow = true;
+          this.add( light );
+          this._camera.position.y = 1;
+
+            var geometry = new THREE.PlaneGeometry( 5, 20, 32 );
+            var material = new THREE.MeshBasicMaterial( {color: 0x555555, side: THREE.DoubleSide} );
+            var plane = new THREE.Mesh( geometry, material );
+            plane.rotateX( - Math.PI / 2);
+            plane.receiveShadow = true;
+            plane.castShadow = false;
+            scene.add( plane );
+
+            var g = new THREE.SphereGeometry(0.1,32,32);
+            var m = new THREE.MeshBasicMaterial({color:0xffff00});
+            var vector = new THREE.Vector3();
+        }
+        scene.animate = ()=> {
+                    if (obj) {
+
+                      var speed = 0.3;
+                      var dt = 0.01;
+                      obj.rotation.y += dt;
+                      if(Math.abs(camera.rotation.y) >= Math.PI*2){camera.rotation.y = 0;}
+                      if(isKeyDown[37]){camera.rotation.y += dt;}
+                      if(isKeyDown[39]){camera.rotation.y -= dt;}
+                      if(isKeyDown[38]){
+                        obj.position.x -= Math.sin(camera.rotation.y) * speed;
+                        obj.position.z -= Math.cos(camera.rotation.y) * speed;
+                      }
+                      if(isKeyDown[40]){
+                        obj.position.x += Math.sin(camera.rotation.y) * speed;
+                        obj.position.z += Math.cos(camera.rotation.y) * speed;
+                      }
+                      camera.position.x = obj.position.x + Math.sin(camera.rotation.y)*2;
+                      camera.position.z = obj.position.z + Math.cos(camera.rotation.y)*2;
+                    }
+
+                    if(objList[1]){
+                       objList[1].position.x = 1;
+                    }
+                    if(objList[0]){
+                       objList[0].position.x = -1;
+                        objList[0].position.z = -1;
+                    }
+                    if(isKeyDown[32]){
+                      camera.getWorldDirection( vector );
+                      var vec = new THREE.Vector3();
+                      vec.x = vector.x;
+                      vec.y = vector.y;
+                      vec.z = vector.z;
+                      var sphere = new THREE.Mesh(g,m);
+                      scene.add(sphere);
+                      sphere.x = obj.position.x;
+                      sphere.z = obj.position.z;
+                      var newBall = new ball(sphere,vec);
+                      balls.push(newBall);
+                    }
+                    if(balls.length > 0)
+                    {
+                        for(var i in balls){
+                        balls[i]._mesh.position.x += balls[i]._vector.x * speed;
+                        balls[i]._mesh.position.z += balls[i]._vector.z * speed;
+                    }
+                  }
+                    requestAnimationFrame(animate);
+                    renderer.render(this,camera);
+                }
+
+        scene.init();
+        scene.animate();
+
             $(document).ready(()=>{
-            var scene = new THREE.Scene();
-            var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
-            var renderer = new THREE.WebGLRenderer();
-            renderer.setSize(window.innerWidth,window.innerHeight);
-            document.body.appendChild(renderer.domElement);
-            
-            var geometry = new THREE.BoxGeometry(1,1,1);
-            var material = new THREE.MeshBasicMaterial({color:0x00ff00});
-            var cube = new THREE.Mesh(geometry,material);
-            scene.add(cube);
-            
-            camera.position.z = 5;
-            
-            function animate(){
-                
-                requestAnimationFrame(animate);
-                renderer.render(scene,camera);
-            }
-            function update(){
-                cube.rotation.x += 0.1;
-                cube.rotation.y += 0.1;
-                cube.rotation.z += 0.1;
-            }
-            update();
-            animate();
+                document.body.appendChild(renderer.domElement);
             });
+
         </script>
     </head>
     <body>
