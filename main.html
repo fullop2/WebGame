@@ -5,6 +5,7 @@
         <script src="./js/three.js"></script>
         <script src="./js/loaders/GLTFLoader.js"></script>
         <script src="./js/Game.js"></script>
+        <script src="./js/RotateCameraScene.js"></script>
 
         <script>
 
@@ -13,15 +14,15 @@
           this._vector = vector;
         }
 
+        var camera = new RotateCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+        var scene = new CameraRotationScene(camera);
 
+        initGame(camera,scene);
+        loop();
 
-          $(document).ready(()=>{
-            var game = new Game();
-            var modelLoader = new ModelLoader();
-            document.body.appendChild(game._renderer.domElement);
-            game.scene.init();
-            game.loop();
-            });
+        $(document).ready(()=>{
+          document.body.appendChild(GameBuilder.renderer.domElement);
+        });
 
         </script>
     </head>
