@@ -13,11 +13,16 @@
           this._vector = vector;
         }
 
+
+
           $(document).ready(()=>{
-              document.body.appendChild(game._renderer.domElement);
-                  game._scene.init();
+            var game = new Game();
+            var modelLoader = new ModelLoader();
+            document.body.appendChild(game._renderer.domElement);
+            game.scene.init();
+            game.loop();
             });
-          game.animate();
+
         </script>
     </head>
     <body>

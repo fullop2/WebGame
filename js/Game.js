@@ -8,19 +8,55 @@ $(document).keyup(function(e){ // 눌렸던 키를 해제
   isKeyDown[e.which.toString()] = false;
 });
 
-function Game(){
+class GScene extends THREE.Scene{
+  constructor(){
+    super(camera);
+    this._objects = new Array;
+    this._camera = camera;
+  }
 
-    this._scene = new Scene();
+  init(){
+    var light = new THREE.PointLight( 0xcccccc, 1, 100 );
+    light.position.set( 0, 3, 0 );
+    this.add( light );
+
+    var geometry = new THREE.PlaneGeometry( 50, 50, 50 );
+    var material = new THREE.MeshBasicMaterial( {color: 0x555555, side: THREE.DoubleSide} );
+    var plane = new THREE.Mesh( geometry, material );
+    plane.rotateX( - Math.PI / 2);
+    plane.position.set(0,0,0);
+    this.add( plane );
+
+    this._camera.position.set(0.5,0.7,0.1);
+    this._camera.lookAt(0,0,0);
+    var vector = new THREE.Vector3();
+    this._camera.getWorldDirection(vector);
+    modelLoader.load('./models/detail_rocks.glb',this);
+  }
+  update(){
+    this._objects = this._objects.filter(object=>{
+      return object.update();
+    });
+  }
+}
+
+class Game{
+  constructor(){
     this._camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+    this._scene = new GScene(this._camera);
     this._renderer = new THREE.WebGLRenderer({antialias:true});
     this._renderer.setSize(window.innerWidth*0.9,window.innerHeight*0.9);
     this._renderer.setClearColor (0x999999, 1);
+  }
+  get scene(){
+    return this._scene;
+  }
 
-    this.animate =()=>{
-      this._scene.update();
-      requestAnimationFrame(this.animate);
-      this._renderer.render(this._scene,this._camera);
-    }
+  loop(){
+    this._scene.update();
+    this._renderer.render(this._scene,this._camera);
+    requestAnimationFrame(this.loop);
+  }
 }
 
 function ModelLoader(){
@@ -39,36 +75,4 @@ function ModelLoader(){
       }
     );
   }
-
 }
-
-function Scene(){
-  var _objects = [];
-
-  this.init =()=>{
-
-      var light = new THREE.PointLight( 0xcccccc, 1, 100 );
-      light.position.set( 0, 3, 0 );
-      this.add( light );
-
-      var geometry = new THREE.PlaneGeometry( 50, 50, 50 );
-      var material = new THREE.MeshBasicMaterial( {color: 0x555555, side: THREE.DoubleSide} );
-      var plane = new THREE.Mesh( geometry, material );
-      plane.rotateX( - Math.PI / 2);
-      plane.position.set(0,0,0);
-      this.add( plane );
-
-      game._camera.position.set(0.5,0.7,0.1);
-      game._camera.lookAt(0,0,0);
-      var vector = new THREE.Vector3();
-      game._camera.getWorldDirection(vector);
-      modelLoader.load('./models/detail_rocks.glb',this);
-    }
-    this.update=()=>{
-    }
-}
-Scene.prototype = new THREE.Scene();
-Scene.prototype.constructor = Scene;
-
-game = new Game();
-modelLoader = new ModelLoader();
