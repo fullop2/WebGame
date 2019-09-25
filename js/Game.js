@@ -32,7 +32,14 @@ const GameBuilder = {
     return this._loader;
   }
 };
+class GMesh extends THREE.Mesh{
+  constructor(geometry,material){
+    super(geometry,material);
+  }
+  update(){
 
+  }
+}
 class GObject extends THREE.Object3D{
   constructor(){
     super();
@@ -57,7 +64,7 @@ class GScene extends THREE.Scene{
   add(object){
     if(object instanceof THREE.Object3D){
       super.add(object);
-      if(object instanceof GObject){
+      if(object instanceof GObject || object instanceof GMesh){
         this._objects.push(object);
       }
     } else{
@@ -80,11 +87,13 @@ function loop(){
   requestAnimationFrame(loop);
 }
 
-function loadModel(dir,scene){
+function loadModel(dir,scene,vector){
   GameBuilder.loader.load(
     dir,
     (gltf)=>{
       scene.add(gltf.scene);
+      gltf.scene.position.set(vector.x,vector.y,vector.z);
+      console.log(gltf.scene.position);
     },
     (xhr)=>{
       console.log((xhr.loaded / xhr.total*100)+"% loaded");

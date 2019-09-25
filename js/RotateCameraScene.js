@@ -14,7 +14,10 @@ class CameraRotationScene extends GScene{
     plane.position.set(0,0,0);
     this.add( plane );
 
-    loadModel('./models/detail_rocks.glb',this);
+    var vector = new THREE.Vector3(3,0,1);
+    loadModel('./models/detail_rocks.glb',this,vector);
+    vector = new THREE.Vector3(3,0,3);
+    loadModel('./models/detail_rocks.glb',this,vector);
 
     this.add(new Shooter(this._camera));
   }
@@ -28,50 +31,68 @@ class RotateCamera extends THREE.PerspectiveCamera{
   }
   update(){
 
-    if(this._deg >= 2*Math.PI){
-      this._deg = 0;
-    } else{
-      this._deg += 0.01;
-    }
+
     if(isKeyDown['38']){
       this._distance -= 0.01;
     }
     if(isKeyDown['40']){
       this._distance += 0.01;
     }
-    this.position.set(this._distance*Math.sin(this._deg),0.7,this._distance*Math.cos(this._deg));
+    this.position.set(5*this._distance*Math.sin(this._deg),20,5*this._distance*Math.cos(this._deg));
     this.lookAt(0,0,0);
   }
 }
-
-class Ball extends GObject{
-  constructor(geometry, material){
+class Ball extends GMesh{
+  constructor(geometry, material,pos, r, vector){
     super(geometry,material);
+    this.position.set(pos.x,pos.y,pos.z);
+
     this._limitTime = 100;
+    this._vector = vector.multiplyScalar(0.01);
+    this._radius = r;
   }
   update(){
-    return (this._limitTime-- > 0);
+    if(this.position.y + this._radius <= 0){
+      if(0 <= this._vector.y && this._vector.y < 0.001){
+        this._vector.y = 5;
+      }
+      else{
+        this._vector.y = -0.9 * this._vector.y;
+      }
+    }
+    else{
+      this._vector.y -= 0.01;
+    }
+    this.position.add(this._vector);
+
+    //return (this._limitTime-- > 0);
   }
 }
+
+
 class Shooter extends GObject {
   constructor(camera){
     super();
+    this.position.x = this.position.y = this.position.z = 0;
     this._camera = camera;
     this._ball = {
-      _geometry : new THREE.SphereGeometry(5,32,32),
+      _geometry : new THREE.SphereGeometry(0.1,256,256),
       _material : new THREE.MeshBasicMaterial({color:0xffff00}),
     };
+    this._timer = 0;
   }
   update(){
-    if(isKeyDown['32']){
-      var newBall = new Ball(this._ball._geometry,this._ball._material);
+    if(isKeyDown['32'] && this._timer == 0){
       var vector = new THREE.Vector3();
       this._camera.getWorldDirection(vector);
-      newBall.position.x = this._camera.position.x + vector.x;
-      newBall.position.y = this._camera.position.y + vector.y;
-      newBall.position.z = this._camera.position.z + vector.z;
-      console.log(newBall.position);
+      vector.y = 1;
+      vector.x += 1;
+      var newBall = new Ball(this._ball._geometry,this._ball._material,this._camera.position, -5, vector );
       GameBuilder.scene.add(newBall);
+      this._timer = 30;
+    }
+    else if(this._timer > 0){
+      this._timer--;
     }
   }
 }

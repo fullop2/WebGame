@@ -9,14 +9,8 @@
 
         <script>
 
-        function ball(mesh, vector) {
-          this._mesh = mesh;
-          this._vector = vector;
-        }
-
         var camera = new RotateCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
         var scene = new CameraRotationScene(camera);
-
         initGame(camera,scene);
         loop();
 
