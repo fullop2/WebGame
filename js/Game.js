@@ -8,6 +8,23 @@ $(document).keyup(function(e){ // 눌렸던 키를 해제
   isKeyDown[e.which.toString()] = false;
 });
 
+const ResourceManager = {
+  _geometry : [],
+  _model : [],
+  getGeometry(name){
+    return this._geometry[name];
+  },
+  setGeometry(name, geometry){
+    this._geometry[name] = geometry;
+  },
+  getModel(name){
+    return this._model[name];
+  },
+  setModel(name,model){
+    this._model[name] = model;
+  }
+}
+
 const GameBuilder = {
   _scene : null,
   _camera : null,
@@ -30,7 +47,8 @@ const GameBuilder = {
   },
   get loader(){
     return this._loader;
-  }
+  },
+
 };
 class GMesh extends THREE.Mesh{
   constructor(geometry,material){
@@ -54,6 +72,7 @@ class GScene extends THREE.Scene{
     super();
     this._objects = [];
     this._camera = null;
+    this._terrain = [];
   }
   update(){
     this._objects.forEach(object=>{
@@ -87,19 +106,26 @@ function loop(){
   requestAnimationFrame(loop);
 }
 
-function loadModel(dir,scene,vector){
-  GameBuilder.loader.load(
-    dir,
-    (gltf)=>{
-      scene.add(gltf.scene);
-      gltf.scene.position.set(vector.x,vector.y,vector.z);
-      console.log(gltf.scene.position);
-    },
-    (xhr)=>{
-      console.log((xhr.loaded / xhr.total*100)+"% loaded");
-    },
-    (error)=>{
-      console.log('An error happened : ' + error);
-    }
-  );
+function loadModel(name, dir,scene,vector){
+  geometry = ResourceManager.getModel(name);
+  if(geometry === undefined){
+    GameBuilder.loader.load(
+      dir,
+      (gltf)=>{
+        scene.add(gltf.scene);
+        ResourceManager.setModel(dir,gltf.scene);
+        gltf.scene.position.set(vector.x,vector.y,vector.z);
+      },
+      (xhr)=>{
+        console.log((xhr.loaded / xhr.total*100)+"% loaded");
+      },
+      (error)=>{
+        console.log('An error happened : ' + error);
+      }
+    );
+  }
+  else {
+      const newObject = new Object3D(ResourceManager.model[name]);
+      scene.add(ResourceManager.model[name]);
+  }
 }
