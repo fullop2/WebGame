@@ -23,24 +23,19 @@ const ResourceManager = {
   setModel(name,model){
     this._model[name] = model;
   }
-}
+};
 
 const GameBuilder = {
   _scene : null,
-  _camera : null,
   _renderer : null,
   _loader :  new THREE.GLTFLoader(),
+  _clock : new THREE.Clock(),
   get scene() {
     return this._scene;
   },
   setScene(scene){
+    this._scene = null;
     this._scene = scene;
-  },
-  get camera() {
-    return this._camera;
-  },
-  setCamera(camera){
-    this._camera = camera;
   },
   get renderer() {
     return this._renderer;
@@ -48,8 +43,34 @@ const GameBuilder = {
   get loader(){
     return this._loader;
   },
-
+  get clock(){
+    return this._clock;
+  }
 };
+
+const SceneManager = {
+  _mainScene : null,
+  _scenes : [],
+
+  get mainScene(){
+    return this._mainScene;
+  },
+  addScene(scene){
+    this._scenes.push(scene);
+  }
+};
+
+class GCamera extends THREE.PerspectiveCamera{
+  constructor(fov,aspect,minDistance,maxDistance){
+    super(fov,aspect,minDistance,maxDistance);
+
+  }
+
+  update(deltaTime){
+    return true;
+  }
+}
+
 class GMesh extends THREE.Mesh{
   constructor(geometry,material){
     super(geometry,material);
@@ -58,27 +79,36 @@ class GMesh extends THREE.Mesh{
 
   }
 }
+
 class GObject extends THREE.Object3D{
   constructor(){
     super();
   }
   update(){
-
+    return true;
   }
 }
 
 class GScene extends THREE.Scene{
-  constructor(){
+  constructor(camera){
     super();
     this._objects = [];
-    this._camera = null;
+    this._camera = camera;
     this._terrain = [];
   }
-  update(){
-    this._objects.forEach(object=>{
-      object.update();
-    });
-    this._camera.update();
+  get camera(){
+    return this._camera;
+  }
+  update(deltaTime){
+    for(let i in this._objects){
+      let object = this._objects[i];
+      if(!object.update(deltaTime)){
+        this.remove(object);
+        this._objects.splice(i,1);
+    }
+    }
+    if(this._camera != null)
+      this._camera.update(deltaTime);
   }
   add(object){
     if(object instanceof THREE.Object3D){
@@ -92,20 +122,83 @@ class GScene extends THREE.Scene{
   }
 }
 
-function initGame(camera,scene){
+function initGame(){
+
+  const newScene = new CameraRotationScene();
+  GameBuilder.setScene(newScene);
   GameBuilder._renderer = new THREE.WebGLRenderer({antialias:true});
   GameBuilder._renderer.setSize(window.innerWidth*0.9,window.innerHeight*0.9);
   GameBuilder._renderer.setClearColor (0x999999, 1);
-  GameBuilder._camera = camera;
-  GameBuilder._scene = scene;
+  GameBuilder._camera = new RotateCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+  GameBuilder.clock.start();
+  loop();
+}
+
+function loadResources(){
+      const prom = [
+        loadModelPromise('./models/detail_rocks.glb'),
+        loadModelPromise('./models/snow_tile_tree.glb'),
+        loadModelPromise('./models/towerRound_sampleA.glb'),
+        loadModelPromise('./models/tile_dirt.glb')];
+
+      Promise.all(prom)
+      .then((values)=>{
+        ResourceManager.setModel('rock', values[0]);
+        ResourceManager.setModel('tree',values[1]);
+        ResourceManager.setModel('sampleA',values[2]);
+        ResourceManager.setModel('dirt',values[3]);
+        initGame();
+        document.body.appendChild(GameBuilder.renderer.domElement);
+      })
+      .catch(()=>{
+        console.log('error from promise');
+      });
 }
 
 function loop(){
-  GameBuilder.scene.update();
-  GameBuilder.renderer.render(GameBuilder.scene,GameBuilder.camera);
+  GameBuilder.scene.update(GameBuilder.clock.getDelta());
+  GameBuilder.renderer.render(GameBuilder.scene,GameBuilder.scene.camera);
   requestAnimationFrame(loop);
 }
 
+function loadModelPromise(dir){
+  return new Promise(resolve=>{
+      GameBuilder.loader.load(
+        dir,
+        (gltf)=>{
+          resolve(gltf.scene);
+        },
+        (xhr)=>{
+          console.log((xhr.loaded / xhr.total*100)+"% loaded");
+        },
+        (error)=>{
+          console.log('An error happened : ' + error);
+          reject(new Object3D());
+        }
+
+      );
+  });
+}
+
+function loadModelPromise(dir){
+  return new Promise(resolve=>{
+      GameBuilder.loader.load(
+        dir,
+        (gltf)=>{
+          resolve(gltf.scene);
+        },
+        (xhr)=>{
+          console.log((xhr.loaded / xhr.total*100)+"% loaded");
+        },
+        (error)=>{
+          console.log('An error happened : ' + error);
+        }
+      );
+  });
+}
+
+
+/*
 function loadModel(name, dir,scene,vector){
   geometry = ResourceManager.getModel(name);
   if(geometry === undefined){
@@ -128,4 +221,4 @@ function loadModel(name, dir,scene,vector){
       const newObject = new Object3D(ResourceManager.model[name]);
       scene.add(ResourceManager.model[name]);
   }
-}
+}*/
