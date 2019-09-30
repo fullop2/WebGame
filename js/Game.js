@@ -26,6 +26,7 @@ const ResourceManager = {
 };
 
 const GameBuilder = {
+  _container : null,
   _scene : null,
   _renderer : null,
   _loader :  new THREE.GLTFLoader(),
@@ -40,11 +41,20 @@ const GameBuilder = {
   get renderer() {
     return this._renderer;
   },
+  setRenderer(renderer){
+    this._renderer =renderer;
+  },
   get loader(){
     return this._loader;
   },
   get clock(){
     return this._clock;
+  },
+  get container(){
+    return this._container;
+  },
+  setContainer(container){
+    this._container = container;
   }
 };
 
@@ -124,12 +134,13 @@ class GScene extends THREE.Scene{
 
 function initGame(){
 
+  GameBuilder.setContainer(document.getElementById("game"));
   const newScene = new CameraRotationScene();
   GameBuilder.setScene(newScene);
-  GameBuilder._renderer = new THREE.WebGLRenderer({antialias:true});
-  GameBuilder._renderer.setSize(window.innerWidth*0.9,window.innerHeight*0.9);
-  GameBuilder._renderer.setClearColor (0x999999, 1);
-  GameBuilder._camera = new RotateCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+  GameBuilder.setRenderer(new THREE.WebGLRenderer({antialias:true}));
+  GameBuilder.renderer.setSize(800,600);
+  GameBuilder.renderer.setClearColor (0x999999, 1);
+  GameBuilder.camera = new RotateCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
   GameBuilder.clock.start();
   loop();
 }
@@ -148,7 +159,7 @@ function loadResources(){
         ResourceManager.setModel('sampleA',values[2]);
         ResourceManager.setModel('dirt',values[3]);
         initGame();
-        document.body.appendChild(GameBuilder.renderer.domElement);
+        GameBuilder.container.appendChild(GameBuilder.renderer.domElement);
       })
       .catch(()=>{
         console.log('error from promise');
