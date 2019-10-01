@@ -3,6 +3,6 @@
 ### You can upload your javascript based game on this site
 ---
 ## dependency
-### * jquery
-### * bootstrap 3
-### * php, mysql
+##### * jquery
+##### * bootstrap 3
+##### * php, mysql

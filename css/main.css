@@ -1,67 +1,11 @@
-
-*{
-    font-family:  'BBTreeGR', serif;
+.jumbotron{
+  margin-top:5px;
 }
-.horizontal-align-container{
-  display:flex;
-  flex-direction: row;
+.game-thumbnail{
+  border: 1px solid black;
+  width:100%;
+  overflow: hidden;
 }
-.fill-parent{
-  height:100%;
-}
-header p{
-  height: 50px;
-  font-size: 3em;
-}
-header{
-  background-color: #f2f2f2;
-}
-#div-gamedesc{
-  padding-top:20px;
-  margin-bottom: 50px;
-}
-.img-thumbnail{
-  width : 180px;
-  height : 180px;
-}
-#div-gametable{
-  margin:10px;
-}
-#btn-goforum{
-  width : 90%;
-  background-color: #111111;
-  color: #dddddd;
-}
-aside{
-  width : 200px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  border-right: 1px solid black;
-  background-color: #f5f5f5;
-}
-aside>h5{
-  text-align: center;
-}
-
-section{
-  flex: 1;
-}
-
-.game h3{
-  margin-left: 30px;
-
-}
-#game{
-  margin : 5px;
-}
-section .posts{
-  padding-top: 5px;
-}
-
-footer{
-    background-color: #f2f2f2;
-    text-align: center;
-    width:100%;
-    position : fixed;
-    bottom:0;
+.search-box{
+  width:inherit;
 }

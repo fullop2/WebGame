@@ -3,16 +3,12 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/font.css">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <title>Open Web Game</title>
-
   </head>
   <body>
-    <header>
-      <p></p>
-      <p class="lottemarthappy text-center">Web Open Game</p>
-      <p></p>
-    </header>
+
 
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
@@ -20,123 +16,75 @@
           <a class="navbar-brand" href="#">WOG</a>
         </div>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">Page 1</a></li>
+          <li class="active"><a href="./main.html">Home</a></li>
+          <li><a href="./game.html">Tower Defense Game</a></li>
           <li><a href="#">Page 2</a></li>
           <li><a href="#">Page 3</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
           <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-
         </ul>
       </div>
     </nav>
-
-    <div class="horizontal-align-container">
-      <aside>
-          <div id="div-gamedesc" class = "text-center" >
-            <img src="img/thumbnail.jpg" class ="img-thumbnail" alt="game picture">
-            <p>Tower Defense Game</p>
-            <p>Rating : 4.0</p>
-            <button class="btn" id="btn-goforum">Go to Forum</button>
-          </div>
-
-          <div id="div-gametable">
-            <table class="table">
-              <tr>
-                <th>Hot Game</th>
-              </tr>
-              <tr>
-                <td>Hello</td>
-              </tr>
-              <tr>
-                <td>World</td>
-              </tr>
-              <tr>
-                <td>OKKKK</td>
-              </tr>
-              <tr>
-                <td>TESTTTTT</td>
-              </tr>
-              <tr>
-                <td>1</td>
-              </tr>
-              <tr>
-                <td>2</td>
-              </tr>
-              <tr>
-                <td>3</td>
-              </tr>
-              <tr>
-                <td>4</td>
-              </tr>
-              <tr>
-                <td>5</td>
-              </tr>
-              <tr>
-                <td>6</td>
-              </tr>
-            </table>
-          </div>
-      </aside>
-      <section>
-        <article class="game">
-          <h3 id="game-title">Tower Defense Game</h3>
-          <div id="game">
-          </div>
-        </article>
-        <article class="posts">
-          <table class="table table-hover">
-            <tr>
-              <th>Title</th>
-              <th>Count</th>
-              <th>Vote</th>
-            </tr>
-            <tr>
-              <td><a href="#">easy way to clear</a></td>
-              <td>52</td>
-              <td>3</td>
-            </tr>
-            <tr>
-              <td><a href="#">try it</a></td>
-              <td>30</td>
-              <td>10</td>
-            </tr>
-            <tr>
-              <td><a href="#">anyway I clear</a></td>
-              <td>26</td>
-              <td>15</td>
-            </tr>
-            <tr>
-              <td><a href="#">have fun with this guide</a></td>
-              <td>65</td>
-              <td>1</td>
-            </tr>
-          </table>
-        </article>
-      </section>
-
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Web Open Game</h1>
+        <p>you can play or upload your game</p>
+        <button class="btn btn-info btn-lg">Upload</button>
+      </div>
     </div>
-    <footer class="container-fluid">
+    <div class="container bg-3 text-center main-article">
+      <div class="row">
+        <div class="col-md-12"><h3>Newest Games</h3></div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <img src="./img/thumbnail.gif" class="img-responsive game-thumbnail" alt="Image">
+          <p>game name</p>
+        </div>
+        <div class="col-md-4">
+          <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive game-thumbnail" alt="Image">
+          <p>game name</p>
+        </div>
+        <div class="col-md-4">
+          <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive game-thumbnail" alt="Image">
+          <p>game name</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12"><h3>Hotest Games</h3></div>
+        <div class="col-md-4">
+          <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive game-thumbnail" alt="Image">
+          <p>game name</p>
+        </div>
+        <div class="col-md-4">
+          <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive game-thumbnail" alt="Image">
+          <p>game name</p>
+        </div>
+        <div class="col-md-4">
+          <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive game-thumbnail" alt="Image">
+          <p>game name</p>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <h3>You want play other games?</h3>
+          <form action="search.php" class="form-inline" method="GET">
+            <input type="search" placeholder="search other games!" class="form-control search-box">
+            <input type="submit" value="Search!" class="btn btn-default">
+          </form>
+        </div>
+      </div>
+    </div>
+    <footer class="container-fluid text-center">
       <address>
         please contact us : <a href="mailto:parkth32@gmail.com?subject=feedback">email me</a>
       </address>
     </footer>
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-
-    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="./js/three.js"></script>
-    <script src="./js/loaders/GLTFLoader.js"></script>
-    <script src="./js/Game.js"></script>
-    <script src="./js/RotateCameraScene.js"></script>
-    <script>
-    loadResources();
-    </script>
   </body>
+
 </html>

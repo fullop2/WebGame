@@ -26,10 +26,10 @@ function makeCameraRotationScene(){
 class TestScene extends GScene{
   constructor(){
     super(new RotateCamera(75,window.innerWidth/window.innerHeight,0.1,1000));
-    const light = new THREE.PointLight( 0xcccccc, 1, 100 );
+    const light = new THREE.PointLight( 0xffffff, 10, 10000 );
     light.position.set( 0, 10, 0 );
     this.add( light );
-    light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+    light = new THREE.HemisphereLight( 0xffffbb, 0xdddddd, 1 );
     this.add(light);
 
     const geometry = new THREE.PlaneGeometry( 50, 50, 50 );
@@ -65,14 +65,14 @@ class CameraRotationScene extends GScene{
   constructor(){
     super(new RotateCamera(75,window.innerWidth/window.innerHeight,0.1,1000));
 
-    var light = new THREE.PointLight( 0xcccccc, 1, 100 );
-    light.position.set( 0, 10, 0 );
+    var light = new THREE.PointLight( 0xcccccc, 3, 1000 );
+    light.position.set( -10, 100, -10 );
     this.add( light );
-    light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+    light = new THREE.HemisphereLight( 0xffffbb, 0x101010, 1 );
     this.add(light);
 
     var geometry = new THREE.PlaneGeometry( 50, 50, 50 );
-    var material = new THREE.MeshBasicMaterial( {color: 0x555555, side: THREE.DoubleSide} );
+    var material = new THREE.MeshBasicMaterial( {color: 0xcccccc, side: THREE.DoubleSide} );
     var plane = new THREE.Mesh( geometry, material );
     plane.rotateX( - Math.PI / 2);
     plane.position.set(0,0,0);

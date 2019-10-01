@@ -6,7 +6,9 @@
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" type="text/css" href="css/game.css">
     <title>Open Web Game</title>
-
+<?php
+$now_page = $_GET['id'];
+$body = '
   </head>
   <body>
     <header>
@@ -122,3 +124,6 @@
     </script>
   </body>
 </html>
+'
+
+echo $body;
